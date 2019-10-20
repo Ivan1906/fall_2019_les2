@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 
 import "./styles.css";
-import { MoreButton } from "./MoreButton";
-import { PostList } from "./PostList";
+import MoreButton from "./MoreButton";
+import PostList from "./PostList";
 import FilterPostList from "./FilterPostList";
 
 const STEP = 10;
@@ -40,9 +40,9 @@ function App() {
   };
 
   const FilterBY = (array, type, value) => {
-    if (type === "title") {
+    if (type === "title" && !!value.trim()) {
       return array.filter(el => el.title.includes(value));
-    } else if (type === "body") {
+    } else if (type === "body" && !!value.trim()) {
       return array.filter(el => el.body.includes(value));
     }
     return array;
