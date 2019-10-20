@@ -1,0 +1,68 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Arial";
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+  margin: 0 15%;
+}
+
+button {
+  width: 100%;
+  padding: 3px 0;
+}
+
+ul {
+  width: 100%;
+  margin: 5px 0;
+  padding: 0;
+}
+
+li {
+  border: 1px solid gray;
+  list-style-type: none;
+  margin: 3px 0;
+}
+
+li:hover {
+  border-width: 2px;
+  border-color: black;
+  box-shadow: blue 2px 2px;
+}
+
+li > h6 {
+  background: silver;
+  color: navy;
+  margin: 2px 5px;
+  padding: 3px 0;
+  text-align: center;
+  font-style: italic;
+}
+
+li > p {
+  text-align: justify;
+  margin: 2px 15px;
+  font-size: 12px;
+}
+
+.filter {
+  margin: 5px 0;
+}
+input {
+  width: 80%;
+  border: 1px solid blueviolet;
+  padding: 2px 5px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+select {
+  width: 16%;
+  border: 1px solid blueviolet;
+  padding: 1px 0;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
