@@ -5,17 +5,20 @@ import "./styles.css";
 import MoreButton from "./MoreButton";
 import PostList from "./PostList";
 import FilterPostList from "./FilterPostList";
+import Loader from "./Loader";
 
 const STEP = 10;
 const URL = "https://jsonplaceholder.typicode.com/posts";
+
+const fetchData = async url => await (await fetch(url)).json();
 
 function App() {
   const [state, setState] = useState({
     items: [],
     total: 0,
+    countItemPosts: STEP,
     valueFilter: "",
     typeFilter: "title",
-    countItemPosts: STEP,
     loading: false
   });
 
@@ -39,42 +42,36 @@ function App() {
     });
   };
 
-  const FilterBY = (array, type, value) => {
+  const FilterBY = (array, countEl, type, value) => {
     if (type === "title" && !!value.trim()) {
-      return array.filter(el => el.title.includes(value));
+      return array.filter(el => el.title.includes(value)).slice(0, countEl);
     } else if (type === "body" && !!value.trim()) {
-      return array.filter(el => el.body.includes(value));
+      return array.filter(el => el.body.includes(value)).slice(0, countEl);
     }
-    return array;
+    return array.slice(0, countEl);
   };
 
   useEffect(() => {
-    fetch(URL)
-      .then(response => response.json())
+    let timer;
+    setState({ ...state, loading: true });
+    fetchData(URL)
       .then(data => {
-        data.forEach((el, i) => {
-          if (i < state.countItemPosts) {
-            setState(prevState => {
-              return {
-                ...prevState,
-                items: [
-                  ...prevState.items,
-                  { id: el.id, title: el.title, body: el.body }
-                ],
-                total: data.length
-              };
-            });
-          }
-        });
+        let items = data.map(el => ({
+          id: el.id,
+          title: el.title,
+          body: el.body
+        }));
+        timer = setTimeout(() => {
+          setState({ ...state, items: items, total: items.length });
+        }, 3000);
       })
       .catch(err => console.log(err));
 
     return () => {
-      setState(prevState => {
-        return { ...prevState, items: [] };
-      });
+      clearTimeout(timer);
+      setState({ ...state, items: [] });
     };
-  }, [state.countItemPosts]);
+  }, []);
 
   return (
     <div className="App">
@@ -82,9 +79,18 @@ function App() {
         changeTextInput={changeTextInput}
         changeSelect={changeSelect}
       />
-      <PostList
-        Items={FilterBY(state.items, state.typeFilter, state.valueFilter)}
-      />
+      {state.loading ? (
+        <Loader />
+      ) : (
+        <PostList
+          Items={FilterBY(
+            state.items,
+            state.countItemPosts,
+            state.typeFilter,
+            state.valueFilter
+          )}
+        />
+      )}
       {state.countItemPosts < state.total ? (
         <MoreButton onClick={moreLoader} />
       ) : null}
